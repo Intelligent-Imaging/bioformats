@@ -60,8 +60,9 @@ import loci.formats.ImageWriter;
 import loci.formats.MetadataTools;
 import loci.formats.MinMaxCalculator;
 import loci.formats.MissingLibraryException;
-import loci.formats.UpgradeChecker;
 import loci.formats.gui.Index16ColorModel;
+import loci.formats.in.DefaultMetadataOptions;
+import loci.formats.in.MetadataOptions;
 import loci.formats.meta.IMetadata;
 import loci.formats.meta.MetadataRetrieve;
 import loci.formats.meta.MetadataStore;
@@ -88,9 +89,6 @@ public final class ImageConverter {
   private static final Logger LOGGER =
     LoggerFactory.getLogger(ImageConverter.class);
 
-  private static final String NO_UPGRADE_CHECK = "-no-upgrade";
-  private static final String VERSION = "-version";
-
   // -- Fields --
 
   private String in = null, out = null;
@@ -107,6 +105,7 @@ public final class ImageConverter {
   private int channel = -1, zSection = -1, timepoint = -1;
   private int xCoordinate = 0, yCoordinate = 0, width = 0, height = 0;
   private int saveTileWidth = 0, saveTileHeight = 0;
+  private boolean validate = false;
 
   private IFormatReader reader;
   private MinMaxCalculator minMax;
@@ -129,7 +128,7 @@ public final class ImageConverter {
     }
     for (int i=0; i<args.length; i++) {
       if (args[i].startsWith("-") && args.length > 1) {
-        if (args[i].equals(VERSION)) {
+        if (args[i].equals(CommandLineTools.VERSION)) {
           printVersion = true;
           return true;
         }
@@ -143,6 +142,8 @@ public final class ImageConverter {
         else if (args[i].equals("-compression")) compression = args[++i];
         else if (args[i].equals("-nogroup")) group = false;
         else if (args[i].equals("-autoscale")) autoscale = true;
+        else if (args[i].equals("-novalid")) validate = false;
+        else if (args[i].equals("-validate")) validate = true;
         else if (args[i].equals("-overwrite")) {
           overwrite = true;
         }
@@ -190,13 +191,13 @@ public final class ImageConverter {
           }
           catch (NumberFormatException e) { }
         }
-        else if (!args[i].equals(NO_UPGRADE_CHECK)) {
+        else if (!args[i].equals(CommandLineTools.NO_UPGRADE_CHECK)) {
           LOGGER.error("Found unknown command flag: {}; exiting.", args[i]);
           return false;
         }
       }
       else {
-        if (args[i].equals(VERSION)) printVersion = true;
+        if (args[i].equals(CommandLineTools.VERSION)) printVersion = true;
         else if (in == null) in = args[i];
         else if (out == null) out = args[i];
         else {
@@ -287,6 +288,9 @@ public final class ImageConverter {
     throws FormatException, IOException
   {
     nextOutputIndex.clear();
+    MetadataOptions options= new DefaultMetadataOptions();
+    options.setValidate(validate);
+    writer.setMetadataOptions(options);
     firstTile = true;
     boolean success = parseArgs(args);
     if (!success) {
@@ -294,11 +298,11 @@ public final class ImageConverter {
     }
 
     if (printVersion) {
-      System.out.println("Version: " + FormatTools.VERSION);
-      System.out.println("VCS revision: " + FormatTools.VCS_REVISION);
-      System.out.println("Build date: " + FormatTools.DATE);
+      CommandLineTools.printVersion();
       return true;
     }
+
+    CommandLineTools.runUpgradeCheck(args);
 
     if (in == null || out == null) {
       printUsage();
@@ -350,6 +354,7 @@ public final class ImageConverter {
       minMax = (MinMaxCalculator) reader;
     }
 
+    reader.setMetadataOptions(options);
     reader.setGroupFiles(group);
     reader.setMetadataFiltered(true);
     reader.setOriginalMetadataPopulated(true);
@@ -863,17 +868,6 @@ public final class ImageConverter {
 
   public static void main(String[] args) throws FormatException, IOException {
     DebugTools.enableLogging("INFO");
-    if (DataTools.indexOf(args, NO_UPGRADE_CHECK) == -1 &&
-        DataTools.indexOf(args, VERSION) == -1) {
-      UpgradeChecker checker = new UpgradeChecker();
-      boolean canUpgrade =
-        checker.newVersionAvailable(UpgradeChecker.DEFAULT_CALLER);
-      if (canUpgrade) {
-        LOGGER.info("*** A new stable version is available. ***");
-        LOGGER.info("*** Install the new version using:     ***");
-        LOGGER.info("***   'upgradechecker -install'        ***");
-      }
-    }
     ImageConverter converter = new ImageConverter();
     if (!converter.testConvert(new ImageWriter(), args)) System.exit(1);
     System.exit(0);

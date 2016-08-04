@@ -12,17 +12,17 @@ metadataRating = Fair
 opennessRating = Fair
 presenceRating = Very good
 utilityRating = Fair
-reader = SlidebookReader, SlideBook6Reader
+reader = SlidebookReader
 mif = true
 notes = We strongly encourage users to export their .sld files to OME-TIFF \n
 using the SlideBook software.  Bio-Formats is not likely to support the full \n
 range of metadata that is included in .sld files, and so exporting to \n
 OME-TIFF from SlideBook is the best way to ensure that all metadata is \n
 preserved. \n
-Free software from 3I can export the files to OME-TIFF post-acquisition, see \n
+Free software from 3i can export the files to OME-TIFF post-acquisition, see \n
 https://www.slidebook.com/reader.php.\n
 \n
-SlideBook6Reader requires a native binary file to work, see\n
+3i also develops a native SlideBook reader which works with Bio-Formats. See \n
 http://www.openmicroscopy.org/info/slidebook for details.\n
 \n
 .. seealso:: \n
@@ -65,7 +65,7 @@ extensions = .al3d
 owner = `Alicona Imaging <http://www.alicona.com/>`_
 bsd = no
 versions = 1.0
-weHave = * an `AL3D specification document <http://www.alicona.co.uk/home/fileadmin/alicona/downloads/AL3DFormat.pdf>`_ (v1.0, from 2003, in PDF) \n
+weHave = * an AL3D specification document (v1.0, from 2003, in PDF)\n
 * a few AL3D datasets
 weWant = * more AL3D datasets (Z series, T series, 16-bit)
 pixelsRating = Very good
@@ -283,6 +283,24 @@ presenceRating = Fair
 utilityRating = Good
 reader = BDReader
 mif = true
+
+[Becker & Hickl SPC FIFO]
+pagename = becker-hickl-fifo
+extensions = .spc
+owner = `Becker-Hickl <http://www.becker-hickl.de/>`_
+bsd = no
+weHave = * an `SPC specification document <http://www.becker-hickl.com/handbookphp.htm>`_ \n
+* `public sample images <http://downloads.openmicroscopy.org/images/SPC-FIFO/>`__
+weWant = * more SPC sample files
+pixelsRating = Poor
+metadataRating = Fair
+opennessRating = Good
+presenceRating = Poor
+utilityRating = Fair
+reader = SPCReader
+mif = true
+notes = * Only files containing frame, line and pixel clock information \n
+  are currently supported
 
 [Becker & Hickl SPCImage]
 extensions = .sdt
@@ -1476,12 +1494,13 @@ notes = .. seealso:: \n
   `NEF Conversion <http://www.outbackphoto.com/workshop/NEF_conversion/nefconversion.html>`_
 
 [NIfTI]
-extensions = .img, .hdr
+extensions = .img, .hdr, .nii
 developer = `National Institutes of Health <http://www.nih.gov/>`_
 bsd = no
 samples = `Official test data <http://afni.nimh.nih.gov/pub/dist/data/>`_
 weHave = * `NIfTI specification documents <http://afni.nimh.nih.gov/pub/dist/doc/nifti/nifti_revised.html>`_ \n
-* several NIfTI datasets
+* several NIfTI datasets \n
+* `public sample images <http://downloads.openmicroscopy.org/images/NIfTI/>`__
 pixelsRating = Very good
 metadataRating = Good
 opennessRating = Very good
@@ -1912,6 +1931,22 @@ opennessRating = Good
 presenceRating = Fair
 utilityRating = Good
 reader = PrairieReader
+mif = true
+
+[Princeton Instruments SPE]
+extensions = .spe
+developer = `Princeton Instruments <http://www.princetoninstruments.com>`_
+bsd = no
+versions = 3.0
+weHave = * `An official specification document <ftp://ftp.princetoninstruments.com/public/Manuals/Princeton%20Instruments/SPE%203.0%20File%20Format%20Specification.pdf>`_ \n
+* two SPE files
+weWant = * more SPE files
+pixelsRating = Good
+metadataRating = Very good
+opennessRating = Very good
+presenceRating = Fair
+utilityRating = Good
+reader = SPEReader
 mif = true
 
 [Quesant]

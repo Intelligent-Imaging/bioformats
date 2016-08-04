@@ -63,7 +63,6 @@ import loci.formats.MetadataTools;
 import loci.formats.MinMaxCalculator;
 import loci.formats.MissingLibraryException;
 import loci.formats.Modulo;
-import loci.formats.UpgradeChecker;
 import loci.formats.gui.AWTImageTools;
 import loci.formats.gui.BufferedImageReader;
 import loci.formats.gui.ImageViewer;
@@ -91,9 +90,6 @@ public class ImageInfo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ImageInfo.class);
   private static final String NEWLINE = System.getProperty("line.separator");
-
-  private static final String NO_UPGRADE_CHECK = "-no-upgrade";
-  private static final String VERSION = "-version";
 
   private static final ImmutableSet<String> HELP_ARGUMENTS =
       ImmutableSet.of("-h", "-help", "--help");
@@ -123,7 +119,7 @@ public class ImageInfo {
   private boolean ascii = false;
   private boolean usedFiles = true;
   private boolean omexmlOnly = false;
-  private boolean validate = true;
+  private boolean validate = false;
   private boolean flat = true;
   private String omexmlVersion = null;
   private int start = 0;
@@ -173,7 +169,7 @@ public class ImageInfo {
     preload = false;
     usedFiles = true;
     omexmlOnly = false;
-    validate = true;
+    validate = false;
     flat = true;
     omexmlVersion = null;
     xmlSpaces = 3;
@@ -192,7 +188,7 @@ public class ImageInfo {
     if (args == null) return false;
     for (int i=0; i<args.length; i++) {
       if (args[i].startsWith("-")) {
-        if (args[i].equals(VERSION)){
+        if (args[i].equals(CommandLineTools.VERSION)){
           printVersion = true;
           return true;
         }
@@ -217,6 +213,7 @@ public class ImageInfo {
           autoscale = true;
         }
         else if (args[i].equals("-novalid")) validate = false;
+        else if (args[i].equals("-validate")) validate = true;
         else if (args[i].equals("-noflat")) flat = false;
         else if (args[i].equals("-debug")) {
           DebugTools.setRootLevel("DEBUG");
@@ -274,7 +271,7 @@ public class ImageInfo {
             cache = true;
             cachedir = args[++i];
         }
-        else if (!args[i].equals(NO_UPGRADE_CHECK)) {
+        else if (!args[i].equals(CommandLineTools.NO_UPGRADE_CHECK)) {
           LOGGER.error("Found unknown command flag: {}; exiting.", args[i]);
           return false;
         }
@@ -980,9 +977,6 @@ public class ImageInfo {
       if (omexmlOnly) {
         DebugTools.setRootLevel("OFF");
       }
-      if (validate) {
-        service.validateOMEXML(xml);
-      }
     }
     else {
       LOGGER.info("The metadata could not be converted to OME-XML.");
@@ -1016,11 +1010,10 @@ public class ImageInfo {
     boolean validArgs = parseArgs(args);
     if (!validArgs) return false;
     if (printVersion) {
-      System.out.println("Version: " + FormatTools.VERSION);
-      System.out.println("VCS revision: " + FormatTools.VCS_REVISION);
-      System.out.println("Build date: " + FormatTools.DATE);
+      CommandLineTools.printVersion();
       return true;
     }
+    CommandLineTools.runUpgradeCheck(args);
 
     createReader();
 
@@ -1034,7 +1027,17 @@ public class ImageInfo {
 
     // initialize reader
     long s = System.currentTimeMillis();
-    reader.setId(id);
+    try {
+      MetadataOptions options= new DefaultMetadataOptions();
+      options.setValidate(validate);
+      reader.setMetadataOptions(options);
+      reader.setId(id);
+    } catch (FormatException exc) {
+      reader.close();
+      LOGGER.error("Failure during the reader initialization");
+      LOGGER.debug("", exc);
+      return false;
+    }
     long e = System.currentTimeMillis();
     float sec = (e - s) / 1000f;
     LOGGER.info("Initialization took {}s", sec);
@@ -1056,7 +1059,7 @@ public class ImageInfo {
       printOriginalMetadata();
     }
 
-    // output and validate OME-XML
+    // output OME-XML
     if (omexml) printOMEXML();
 
     if (!pixels) {
@@ -1114,17 +1117,6 @@ public class ImageInfo {
 
   public static void main(String[] args) throws Exception {
     DebugTools.enableLogging("INFO");
-    if (DataTools.indexOf(args, NO_UPGRADE_CHECK) == -1 &&
-        DataTools.indexOf(args, VERSION) == -1) {
-      UpgradeChecker checker = new UpgradeChecker();
-      boolean canUpgrade =
-        checker.newVersionAvailable(UpgradeChecker.DEFAULT_CALLER);
-      if (canUpgrade) {
-        LOGGER.info("*** A new stable version is available. ***");
-        LOGGER.info("*** Install the new version using:     ***");
-        LOGGER.info("***   'upgradechecker -install'        ***");
-      }
-    }
     if (!new ImageInfo().testRead(args)) System.exit(1);
   }
 

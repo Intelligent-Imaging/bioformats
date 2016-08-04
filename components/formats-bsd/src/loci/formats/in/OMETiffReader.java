@@ -248,7 +248,12 @@ public class OMETiffReader extends FormatReader {
       }
 
       for (int i=0; i<meta.getImageCount(); i++) {
-        meta.setPixelsBinDataBigEndian(Boolean.TRUE, i, 0);
+        meta.setPixelsBigEndian(Boolean.TRUE, i);
+        if (meta.getPixelsBinDataCount(i) > 0) {
+          for (int j=0; j<meta.getPixelsBinDataCount(i); j++) {
+            meta.setPixelsBinDataBigEndian(Boolean.TRUE, i, j);
+          }
+        }
         MetadataTools.verifyMinimumPopulated(meta, i);
       }
       return meta.getImageCount() > 0;
@@ -349,7 +354,7 @@ public class OMETiffReader extends FormatReader {
     }
     IFD ifd = ifdList.get(i);
     RandomAccessInputStream s =
-      new RandomAccessInputStream(info[series][no].id);
+      new RandomAccessInputStream(info[series][no].id, 16);
     TiffParser p = new TiffParser(s);
     p.getSamples(ifd, buf, x, y, w, h);
     s.close();
@@ -404,6 +409,7 @@ public class OMETiffReader extends FormatReader {
     super.close(fileOnly);
     if (info != null) {
       for (OMETiffPlane[] dimension : info) {
+        if (dimension == null) continue;
         for (OMETiffPlane plane : dimension) {
           if (plane.reader != null) {
             try {
@@ -853,7 +859,7 @@ public class OMETiffReader extends FormatReader {
       CoreMetadata m = core.get(s);
       info[s] = planes;
       try {
-        RandomAccessInputStream testFile = new RandomAccessInputStream(info[s][0].id);
+        RandomAccessInputStream testFile = new RandomAccessInputStream(info[s][0].id, 16);
         String firstFile = info[s][0].id;
         if (!info[s][0].reader.isThisType(testFile)) {
           LOGGER.warn("{} is not a valid OME-TIFF", info[s][0].id);
@@ -871,7 +877,7 @@ public class OMETiffReader extends FormatReader {
 
             continue;
           }
-          testFile = new RandomAccessInputStream(info[s][plane].id);
+          testFile = new RandomAccessInputStream(info[s][plane].id, 16);
           if (!info[s][plane].reader.isThisType(testFile)) {
             LOGGER.warn("{} is not a valid OME-TIFF", info[s][plane].id);
             info[s][plane].id = info[s][0].id;
@@ -1055,7 +1061,11 @@ public class OMETiffReader extends FormatReader {
     int realSeries = getSeries();
     for (int i=0; i<getSeriesCount(); i++) {
       setSeries(i);
-      store.setPixelsBinDataBigEndian(new Boolean(!isLittleEndian()), i, 0);
+      if (meta.getPixelsBinDataCount(i) > 0) {
+        for (int j=0; j<meta.getPixelsBinDataCount(i); j++) {
+          store.setPixelsBinDataBigEndian(new Boolean(!isLittleEndian()), i, j);
+        }
+      }
     }
     setSeries(realSeries);
     return store;

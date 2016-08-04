@@ -28,3 +28,6 @@ tools/*.jar
 
 # For Fiji #
 loci_tools.jar
+
+components/formats-gpl/src/loci/formats/in/SlideBook6Reader.java
+components/formats-gpl/src/loci/formats/in/SlideBook6Reader.java
