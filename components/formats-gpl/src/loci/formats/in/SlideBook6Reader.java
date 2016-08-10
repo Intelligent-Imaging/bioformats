@@ -140,6 +140,8 @@ public class SlideBook6Reader  extends FormatReader {
 	public byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
 			throws FormatException, IOException
 	{
+		openFile(getCurrentFile());
+
 		FormatTools.checkPlaneParameters(this, no, buf.length, x, y, w, h);
 
 		int[] zct = FormatTools.getZCTCoords(this, no);
@@ -169,6 +171,8 @@ public class SlideBook6Reader  extends FormatReader {
 				}
 			}
 		}
+		closeFile();
+
 		return buf;
 	}
 
@@ -339,6 +343,7 @@ public class SlideBook6Reader  extends FormatReader {
 					objectiveIndex++;
 				}
 			}
+			closeFile();
 		}
 		catch (UnsatisfiedLinkError e) {
 			throw new MissingLibraryException(GENERAL_3I_MSG, e);
