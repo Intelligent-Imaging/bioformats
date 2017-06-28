@@ -2,7 +2,7 @@
  * #%L
  * BSD implementations of Bio-Formats readers and writers
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -40,7 +40,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import loci.common.DataTools;
 import loci.common.Location;
@@ -56,7 +56,6 @@ import loci.formats.IFormatReader;
 import loci.formats.MetadataTools;
 import loci.formats.MissingLibraryException;
 import loci.formats.Modulo;
-import loci.formats.meta.IMetadata;
 import loci.formats.meta.MetadataStore;
 import loci.formats.ome.OMEXMLMetadata;
 import loci.formats.services.OMEXMLService;
@@ -102,7 +101,8 @@ public class OMETiffReader extends FormatReader {
 
   /** Constructs a new OME-TIFF reader. */
   public OMETiffReader() {
-    super("OME-TIFF", new String[] {"ome.tif", "ome.tiff", "companion.ome"});
+    super("OME-TIFF", new String[] {"ome.tiff", "ome.tif", "ome.tf2",
+                                    "ome.tf8", "ome.btf", "companion.ome"});
     suffixNecessary = false;
     suffixSufficient = false;
     domains = FormatTools.NON_GRAPHICS_DOMAINS;
@@ -373,7 +373,7 @@ public class OMETiffReader extends FormatReader {
     FormatTools.assertId(currentId, true, 1);
     int series = getSeries();
     if (noPixels) return null;
-    Vector<String> usedFiles = new Vector<String>();
+    final List<String> usedFiles = new ArrayList<String>();
     if (metadataFile != null) {
       usedFiles.add(metadataFile);
     }
@@ -984,7 +984,7 @@ public class OMETiffReader extends FormatReader {
     // remove null CoreMetadata entries
 
     ArrayList<CoreMetadata> series = new ArrayList<CoreMetadata>();
-    Vector<OMETiffPlane[]> planeInfo = new Vector<OMETiffPlane[]>();
+    final List<OMETiffPlane[]> planeInfo = new ArrayList<OMETiffPlane[]>();
     for (int i=0; i<core.size(); i++) {
       if (core.get(i) != null) {
         series.add(core.get(i));
@@ -1019,7 +1019,31 @@ public class OMETiffReader extends FormatReader {
       }
     }
 
-    MetadataTools.populatePixels(metadataStore, this, true, false);
+    MetadataTools.populatePixels(metadataStore, this, false, false);
+    for (int i=0; i<meta.getImageCount(); i++) {
+      // make sure that TheZ, TheC, and TheT are all set on any
+      // existing Planes
+      // missing Planes are not added, and exising TheZ, TheC, and
+      // TheT values are not changed
+      for (int p=0; p<meta.getPlaneCount(i); p++) {
+        NonNegativeInteger z = meta.getPlaneTheZ(i, p);
+        NonNegativeInteger c = meta.getPlaneTheC(i, p);
+        NonNegativeInteger t = meta.getPlaneTheT(i, p);
+
+        if (z == null) {
+          z = new NonNegativeInteger(0);
+          metadataStore.setPlaneTheZ(z, i, p);
+        }
+        if (c == null) {
+          c = new NonNegativeInteger(0);
+          metadataStore.setPlaneTheC(c, i, p);
+        }
+        if (t == null) {
+          t = new NonNegativeInteger(0);
+          metadataStore.setPlaneTheT(t, i, p);
+        }
+      }
+    }
     for (int i=0; i<acquiredDates.length; i++) {
       if (acquiredDates[i] != null) {
         metadataStore.setImageAcquisitionDate(
@@ -1086,7 +1110,11 @@ public class OMETiffReader extends FormatReader {
 
   /** Extracts the OME-XML from the current {@link #metadataFile}. */
   private String readMetadataFile() throws IOException {
-    if (checkSuffix(metadataFile, "tif") || checkSuffix(metadataFile, "tiff")) {
+    if (checkSuffix(metadataFile, "ome.tiff") ||
+        checkSuffix(metadataFile, "ome.tif") ||
+        checkSuffix(metadataFile, "ome.tf2") ||
+        checkSuffix(metadataFile, "ome.tf8") ||
+        checkSuffix(metadataFile, "ome.btf")) {
       // metadata file is an OME-TIFF file; extract OME-XML comment
       return new TiffParser(metadataFile).getComment();
     }

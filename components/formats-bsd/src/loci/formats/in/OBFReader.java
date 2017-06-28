@@ -2,13 +2,11 @@
  * #%L
  * BSD implementations of Bio-Formats readers and writers
  * %%
- * Copyright (C) Max Planck Institute for Biophysical Chemistry, 
- * Goettingen, 2014 - 2015
- *
- * Copyright (C) 2014 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2014 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
+ *   - Max Planck Institute for Biophysical Chemistry, Goettingen
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -81,9 +79,6 @@ public class OBFReader extends FormatReader
   private static final String STACK_MAGIC_STRING = "OMAS_BF_STACK\n";
   private static final short MAGIC_NUMBER = (short) 0xFFFF;
 
-  private static final int FILE_VERSION = 2;
-  private static final int STACK_VERSION = 5;
-
   private static final int MAXIMAL_NUMBER_OF_DIMENSIONS = 15;
 
   private class Stack
@@ -137,9 +132,9 @@ public class OBFReader extends FormatReader
   @Override
   public boolean isThisType(RandomAccessInputStream stream) throws IOException
   {
-    final int fileVersion = getFileVersion(stream);
+    final int fileVersion = getFileVersion(stream) ;
 
-    return fileVersion >= 0 && fileVersion <= FILE_VERSION;
+    return fileVersion >= 0 ;
   }
 
   @Override
@@ -289,7 +284,7 @@ public class OBFReader extends FormatReader
     final short magicNumber = in.readShort();
     final int version = in.readInt();
 
-    if (magicString.equals(STACK_MAGIC_STRING) && magicNumber == MAGIC_NUMBER && version <= STACK_VERSION)
+    if (magicString.equals(STACK_MAGIC_STRING) && magicNumber == MAGIC_NUMBER)
     {
       CoreMetadata obf = new CoreMetadata();
       core.add(obf);
@@ -372,7 +367,7 @@ public class OBFReader extends FormatReader
       obf.seriesMetadata.put("Name", name);
       String description = in.readString(lengthOfDescription);
 
-      if (description != null) {
+      if (description != null && lengthOfDescription > 0) {
         description = XMLTools.sanitizeXML(description);
 
         // some XML node names may contain white space, which prevents parsing

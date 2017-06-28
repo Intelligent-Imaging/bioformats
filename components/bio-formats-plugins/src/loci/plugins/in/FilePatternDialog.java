@@ -4,7 +4,7 @@
  * Bio-Formats Importer, Bio-Formats Exporter, Bio-Formats Macro Extensions,
  * Data Browser and Stack Slicer.
  * %%
- * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2006 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -34,19 +34,15 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Label;
-import java.awt.Panel;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.Box;
 import javax.swing.JPanel;
 
 import ij.IJ;
@@ -211,8 +207,7 @@ public class FilePatternDialog extends ImporterDialog {
       }
     }
     else if (useRanges) {
-      String pattern =
-        originalID.substring(0, originalID.lastIndexOf(File.separator) + 1);
+      String pattern = "";
       for (int i=0; i<counts.length; i++) {
         BigInteger first = new BigInteger(firsts[i]);
         BigInteger fileCount = new BigInteger(counts[i]);
@@ -225,21 +220,21 @@ public class FilePatternDialog extends ImporterDialog {
         fileCount = fileCount.subtract(BigInteger.ONE).multiply(increment).add(first);
 
         pattern += fp.getPrefix(i);
-        pattern += "<";
+        pattern += '<';
         int firstPadding = paddingZeros[i] - first.toString().length() + 1;
         for (int zero=0; zero<firstPadding; zero++) {
-          pattern += "0";
+          pattern += '0';
         }
         pattern += first;
-        pattern += "-";
+        pattern += '-';
         int lastPadding = paddingZeros[i] - fileCount.toString().length() + 1;
         for (int zero=0; zero<lastPadding; zero++) {
-          pattern += "0";
+          pattern += '0';
         }
         pattern += fileCount;
-        pattern += ":";
+        pattern += ':';
         pattern += increment;
-        pattern += ">";
+        pattern += '>';
       }
       id = pattern + fp.getSuffix();
     }

@@ -8,7 +8,7 @@
   <parent>
     <groupId>ome</groupId>
     <artifactId>pom-bio-formats</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.5.3-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 
@@ -22,6 +22,7 @@
   <licenses>
     <license>
       <name>Simplified BSD License</name>
+      <url>https://opensource.org/licenses/BSD-2-Clause</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -38,19 +39,14 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>formats-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.openmicroscopy</groupId>
       <artifactId>ome-xml</artifactId>
-      <version>${project.version}</version>
+      <version>${ome-model.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.openmicroscopy</groupId>
       <artifactId>specification</artifactId>
-      <version>${project.version}</version>
+      <version>${ome-model.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -89,16 +85,16 @@
     </dependency>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.openmicroscopy</groupId>
       <artifactId>lwf-stubs</artifactId>
-      <version>${project.version}</version>
+      <version>${lwf-stubs.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.openmicroscopy</groupId>
       <artifactId>mipav-stubs</artifactId>
-      <version>${project.version}</version>
+      <version>${mipav-stubs.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -168,6 +164,10 @@
           <additionalClasspathElements>
             <additionalClasspathElement>${basedir}/../../ant/</additionalClasspathElement>
           </additionalClasspathElements>
+          <systemPropertyVariables>
+            <testng.runWriterSaveBytesTests>2</testng.runWriterSaveBytesTests>
+            <testng.runWriterTilingTests>2</testng.runWriterTilingTests>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
@@ -276,40 +276,4 @@
       </properties>
     </developer>
   </developers>
-
-  <!-- NB: for project parent, in case of partial checkout -->
-  <repositories>
-    <repository>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>http://repo.maven.apache.org/maven2</url>
-      <layout>default</layout>
-    </repository>
-    <repository>
-      <id>ome.releases</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
-    </repository>
-    <repository>
-      <id>ome.snapshots</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>http://repo.maven.apache.org/maven2</url>
-      <layout>default</layout>
-    </pluginRepository>
-    <pluginRepository>
-      <id>ome.external</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>imagej.thirdparty</id>
-      <url>http://maven.imagej.net/content/repositories/thirdparty</url>
-    </pluginRepository>
-  </pluginRepositories>
-
 </project>

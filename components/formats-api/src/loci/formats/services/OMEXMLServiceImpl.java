@@ -1,8 +1,8 @@
 /*
  * #%L
- * BSD implementations of Bio-Formats readers and writers
+ * Top-level reader and writer APIs
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -56,7 +56,6 @@ import loci.formats.FormatTools;
 import loci.formats.MetadataTools;
 import loci.formats.Modulo;
 import loci.formats.meta.IMetadata;
-import loci.formats.meta.MetadataConverter;
 import loci.formats.meta.MetadataRetrieve;
 import loci.formats.meta.MetadataStore;
 import loci.formats.meta.ModuloAnnotation;
@@ -65,6 +64,8 @@ import loci.formats.ome.OMEXMLMetadata;
 import loci.formats.ome.OMEXMLMetadataImpl;
 
 import ome.units.quantity.Length;
+
+import ome.xml.meta.MetadataConverter;
 import ome.xml.meta.OMEXMLMetadataRoot;
 import ome.xml.model.BinData;
 import ome.xml.model.Channel;
@@ -196,6 +197,9 @@ public class OMEXMLServiceImpl extends AbstractService implements OMEXMLService
   @Override
   public String transformToLatestVersion(String xml) throws ServiceException {
     String version = getOMEXMLVersion(xml);
+    if (null == version) {
+      throw new ServiceException("Could not get OME-XML version");
+    }
     if (version.equals(getLatestVersion())) return xml;
     LOGGER.debug("Attempting to update XML with version: {}", version);
     LOGGER.trace("Initial dump: {}", xml);

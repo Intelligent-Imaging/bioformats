@@ -8,7 +8,7 @@
   <parent>
     <groupId>ome</groupId>
     <artifactId>pom-bio-formats</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.5.3-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 
@@ -22,20 +22,16 @@
   <licenses>
     <license>
       <name>Simplified BSD License</name>
+      <url>https://opensource.org/licenses/BSD-2-Clause</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>formats-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.openmicroscopy</groupId>
       <artifactId>ome-xml</artifactId>
-      <version>${project.version}</version>
+      <version>${ome-model.version}</version>
     </dependency>
 
     <dependency>
@@ -114,7 +110,7 @@
         <artifactId>license-maven-plugin</artifactId>
         <configuration>
           <licenseName>bsd_2</licenseName>
-          <projectName>BSD implementations of Bio-Formats readers and writers</projectName>
+          <projectName>Top-level reader and writer APIs</projectName>
         </configuration>
       </plugin>
     </plugins>
@@ -215,24 +211,4 @@
       </properties>
     </developer>
   </developers>
-
-  <!-- NB: for project parent, in case of partial checkout -->
-  <repositories>
-    <repository>
-      <id>ome.releases</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
-    </repository>
-    <repository>
-      <id>ome.snapshots</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>ome.external</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
-    </pluginRepository>
-  </pluginRepositories>
-
 </project>

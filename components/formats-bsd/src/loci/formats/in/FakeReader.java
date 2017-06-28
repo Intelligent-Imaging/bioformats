@@ -2,7 +2,7 @@
  * #%L
  * BSD implementations of Bio-Formats readers and writers
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -38,17 +38,13 @@ import static ome.xml.model.Pixels.getPhysicalSizeZUnitXsdDefault;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.bind.DatatypeConverter;
 
 import loci.common.Constants;
 import loci.common.DataTools;
@@ -630,7 +626,7 @@ public class FakeReader extends FormatReader {
         name = token;
         continue;
       }
-      int equals = token.indexOf("=");
+      int equals = token.indexOf('=');
       if (equals < 0) {
         LOGGER.warn("ignoring token: {}", token);
         continue;
@@ -707,7 +703,7 @@ public class FakeReader extends FormatReader {
         // 'color' and 'color_x' can be used together, but 'color_x' takes
         // precedence.  'color' will in that case be used for any missing
         // or invalid 'color_x' values.
-        int index = Integer.parseInt(key.substring(key.indexOf("_") + 1));
+        int index = Integer.parseInt(key.substring(key.indexOf('_') + 1));
 
         while (index >= color.size()) {
           color.add(null);
@@ -1002,7 +998,7 @@ public class FakeReader extends FormatReader {
       Double y0 = getY(i) + ROI_SPACING / 2;
       double [] dx = { -0.8, -.3, .4, .5, -.1};
       double [] dy = { -0.4, .6, .5, -.3, -.7};
-      StringBuffer p = new StringBuffer();
+      final StringBuilder p = new StringBuilder();
       for (int j=0; j<5; j++) {
         p.append(x0 + ROI_SPACING /2 * dx[j]);
         p.append(",");

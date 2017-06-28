@@ -2,7 +2,7 @@
  * #%L
  * OME Bio-Formats package for reading and converting biological file formats.
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 import loci.common.ByteArrayHandle;
-import loci.common.Constants;
 import loci.common.DataTools;
 import loci.common.DateTools;
 import loci.common.Location;
@@ -55,8 +54,6 @@ import loci.formats.tiff.PhotoInterp;
 import loci.formats.tiff.TiffParser;
 
 import ome.units.UNITS;
-import ome.xml.model.primitives.PositiveFloat;
-import ome.xml.model.primitives.PositiveInteger;
 import ome.xml.model.primitives.Timestamp;
 
 /**
@@ -1535,7 +1532,7 @@ public class CellSensReader extends FormatReader {
                   }
                 }
                 if (nIntValues > 1) {
-                  value += ")";
+                  value += ')';
                 }
 
                 if (tag == IMAGE_BOUNDARY) {
@@ -1567,7 +1564,7 @@ public class CellSensReader extends FormatReader {
                   }
                 }
                 if (nDoubleValues > 1) {
-                  value += ")";
+                  value += ')';
                 }
 
                 if (tag == RWC_FRAME_SCALE) {
@@ -2306,7 +2303,7 @@ public class CellSensReader extends FormatReader {
 
     @Override
     public String toString() {
-      StringBuffer b = new StringBuffer("{");
+      final StringBuilder b = new StringBuilder("{");
       for (int p : coordinate) {
         b.append(p);
         b.append(", ");

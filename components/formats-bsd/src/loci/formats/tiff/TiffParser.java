@@ -2,7 +2,7 @@
  * #%L
  * BSD implementations of Bio-Formats readers and writers
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -34,7 +34,6 @@ package loci.formats.tiff;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -90,8 +89,6 @@ public class TiffParser {
 
   /** Cached first IFD in the current file. */
   private IFD firstIFD;
-
-  private int ifdCount = 0;
 
   /** Codec options to be used when decoding compressed pixel data. */
   private CodecOptions codecOptions = CodecOptions.getDefaultOptions();
@@ -309,7 +306,6 @@ public class TiffParser {
     for (int i=0; i<f.length; i++) {
       f[i] = offsets.get(i).longValue();
     }
-    ifdCount = f.length;
 
     return f;
   }

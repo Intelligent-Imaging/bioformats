@@ -4,7 +4,7 @@
  * Bio-Formats Importer, Bio-Formats Exporter, Bio-Formats Macro Extensions,
  * Data Browser and Stack Slicer.
  * %%
- * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2006 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -530,9 +530,9 @@ public class ImporterOptions extends OptionsList {
 
     // delete anything inside square brackets, for simplicity
     while (true) {
-      int lIndex = options.indexOf("[");
+      int lIndex = options.indexOf('[');
       if (lIndex < 0) break;
-      int rIndex = options.indexOf("]");
+      int rIndex = options.indexOf(']');
       if (rIndex < 0) rIndex = options.length() - 1;
       options = options.substring(0, lIndex) + options.substring(rIndex + 1);
     }

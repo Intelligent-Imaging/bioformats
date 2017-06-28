@@ -2,7 +2,7 @@
  * #%L
  * BSD implementations of Bio-Formats readers and writers
  * %%
- * Copyright (C) 2005 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2005 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -34,7 +34,6 @@ package loci.formats;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,13 +41,9 @@ import java.util.LinkedHashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import loci.common.DataTools;
 import loci.common.Location;
-import loci.common.RandomAccessInputStream;
-import loci.formats.in.DefaultMetadataOptions;
-import loci.formats.in.MetadataLevel;
 import loci.formats.in.MetadataOptions;
 import loci.formats.meta.MetadataStore;
 
@@ -628,6 +623,19 @@ public class FileStitcher extends ReaderWrapper {
     return group;
   }
 
+  /* @see IFormatReader#setMetadataOptions(MetadataOptions) */
+  @Override
+  public void setMetadataOptions(MetadataOptions options) {
+    super.setMetadataOptions(options);
+    if (externals != null) {
+      for (ExternalSeries s : externals) {
+        for (DimensionSwapper r : s.getReaders()) {
+          r.setMetadataOptions(options);
+        }
+      }
+    }
+  }
+
   /* @see IFormatReader#setNormalized(boolean) */
   @Override
   public void setNormalized(boolean normalize) {
@@ -838,6 +846,9 @@ public class FileStitcher extends ReaderWrapper {
   /* @see IFormatReader#getUnderlyingReaders() */
   @Override
   public IFormatReader[] getUnderlyingReaders() {
+    if (null == externals) {
+      return super.getUnderlyingReaders();
+    }
     List<IFormatReader> list = new ArrayList<IFormatReader>();
     for (ExternalSeries s : externals) {
       for (DimensionSwapper r : s.getReaders()) {
@@ -1221,7 +1232,7 @@ public class FileStitcher extends ReaderWrapper {
       String newOrder = ((DimensionSwapper) reader).getInputOrder();
       if ((externals[external].getFiles().length > 1 || !r.isOrderCertain()) &&
         (r.getRGBChannelCount() == 1 ||
-        newOrder.indexOf("C") == r.getDimensionOrder().indexOf("C")))
+        newOrder.indexOf('C') == r.getDimensionOrder().indexOf('C')))
       {
         r.swapDimensions(newOrder);
       }
@@ -1259,6 +1270,7 @@ public class FileStitcher extends ReaderWrapper {
           readers[i] = new DimensionSwapper(new ImageReader(classList));
         }
         else readers[i] = new DimensionSwapper();
+        readers[i].setMetadataOptions(getMetadataOptions());
         readers[i].setGroupFiles(false);
       }
       readers[0].setId(files[0]);

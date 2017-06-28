@@ -4,7 +4,7 @@
 # #%L
 # Bio-Formats autogen package for programmatically generating source code.
 # %%
-# Copyright (C) 2007 - 2016 Open Microscopy Environment:
+# Copyright (C) 2007 - 2017 Open Microscopy Environment:
 #   - Board of Regents of the University of Wisconsin-Madison
 #   - Glencoe Software, Inc.
 #   - University of Dundee
@@ -27,7 +27,9 @@
 
 from os import listdir
 import re
-from os.path import basename, dirname, join, abspath, isfile
+from os.path import basename, dirname, join, abspath, isfile, expanduser
+import zipfile
+import sys
 
 HEADER = """# This file documents the metadata support for each file format that
 # Bio-Formats can handle. Default value for unlisted properties is Missing,
@@ -56,6 +58,12 @@ HEADER = """# This file documents the metadata support for each file format that
 # ImagingEnvironment.Temperature = Partial see ticket #167 for details
 
 """
+OMEXML_VERSION = sys.argv[1]
+OMEXML_PATH = join(
+    expanduser("~"), ".m2", "repository", "org", "openmicroscopy", "ome-xml",
+    OMEXML_VERSION, "ome-xml-%s.jar" % OMEXML_VERSION)
+ELEMENT_REGEXP = re.compile("^ome/xml/model/([A-Za-z]+).class$")
+
 
 currentDir = dirname(__file__)
 outputFile = join(currentDir, 'meta-support.txt')
@@ -69,13 +77,17 @@ def is_file(f, ftype=".java"):
 
 def get_xml_elements():
     """List all XML elements from the model"""
+
+    # Since Bio-Formats 5.3.0, the ome-xml component is decoupled from
+    # Bio-Formats. This logic introspects the OME-XML JAR from the local
+    # Maven repository to create the list of elements
     elements = []
-    modelDir = join(
-        componentsDir, 'ome-xml', 'build', 'src', 'ome', 'xml', 'model')
-    for f in sorted(listdir(modelDir)):
-        if not is_file(join(modelDir, f)):
-            continue
-        elements.append(basename(f).rstrip('.java'))
+    with zipfile.ZipFile(OMEXML_PATH, 'r') as zf:
+        for zi in zf.infolist():
+            m = ELEMENT_REGEXP.match(zi.filename)
+            if m:
+                elements.append(m.group(1))
+
     return elements
 
 
@@ -108,6 +120,7 @@ def split_element(s, elements):
     # If more than 1 element is found, use the longest one
     found_element = max(candidates, key=len)
     return "%s.%s" % (s[0:len(found_element)], s[len(found_element):])
+
 
 # Look for Metadatastore setter metthods
 pattern = re.compile('store\.set(\w+)')

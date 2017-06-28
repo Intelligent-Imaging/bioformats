@@ -2,7 +2,7 @@
  * #%L
  * OME Bio-Formats manual and automated test suite.
  * %%
- * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2006 - 2017 Open Microscopy Environment:
  *   - Board of Regents of the University of Wisconsin-Madison
  *   - Glencoe Software, Inc.
  *   - University of Dundee
@@ -1123,6 +1123,18 @@ public class FormatReaderTest {
     for (int i=0; i<reader.getSeriesCount(); i++) {
       config.setSeries(i);
 
+      // Test image acquisition date
+      String expectedDate = config.getDate();
+      String date = null;
+      if (retrieve.getImageAcquisitionDate(i) != null) {
+        date = retrieve.getImageAcquisitionDate(i).getValue();
+      }
+      if (expectedDate != null && date != null && !expectedDate.equals(date)) {
+        result(testName, false, "series " + i +
+          " (expected " + expectedDate + ", actual " + date + ")");
+        return;
+      }
+
       for (int p=0; p<reader.getImageCount(); p++) {
         Time deltaT = null;
         try {
@@ -1711,6 +1723,10 @@ public class FormatReaderTest {
             continue;
           }
 
+          if (reader.getFormat().equals("CellVoyager")) {
+            continue;
+          }
+
           // pattern datasets can only be detected with the pattern file
           if (reader.getFormat().equals("File pattern")) {
             continue;
@@ -2236,6 +2252,14 @@ public class FormatReaderTest {
               continue;
             }
 
+            // Columbus datasets can consist of OME-TIFF files with
+            // extra metadata files
+            if (result && r instanceof ColumbusReader &&
+              readers[j] instanceof OMETiffReader)
+            {
+              continue;
+            }
+
             // Micromanager datasets can consist of OME-TIFF files
             // with an extra metadata file
             if (result && r instanceof MicromanagerReader &&
@@ -2358,6 +2382,13 @@ public class FormatReaderTest {
 
             // QuickTime reader doesn't pick up resource forks
             if (!result && i > 0 && r instanceof QTReader) {
+              continue;
+            }
+
+            if (r instanceof CellVoyagerReader &&
+              (!result || readers[j] instanceof OMEXMLReader) &&
+              used[i].toLowerCase().endsWith(".ome.xml"))
+            {
               continue;
             }
 
