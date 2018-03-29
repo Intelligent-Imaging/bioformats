@@ -7,7 +7,7 @@ QuickTime Movie
 Extensions: .mov
 
 
-Owner: `Apple Computer <http://www.apple.com/>`_
+Owner: `Apple Computer <https://www.apple.com/>`_
 
 **Support**
 
@@ -85,4 +85,4 @@ h263   H.263                               -                  read & write
 ====== ================================== =================== ============ 
 
 .. seealso:: 
-    `QuickTime software overview <http://www.apple.com/quicktime/>`_
+    `QuickTime software overview <https://support.apple.com/quicktime>`_

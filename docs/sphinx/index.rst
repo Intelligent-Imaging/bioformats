@@ -18,13 +18,13 @@ supported by Bio-Formats.
 - :doc:`developers/index`
 - :doc:`formats/index`
 
-Bio-Formats |release| uses the *June 2016* release of the
-:model_doc:`OME Model <>`.
+Bio-Formats |release| requires Java 7 or above and uses the *June 2016*
+release of the :model_doc:`OME Model <>`.
     
 **Bio-Formats is a community project and we welcome your input.** You can
 find guidance on :doc:`about/bug-reporting`, upload files to our
 `QA system <http://qa.openmicroscopy.org.uk/qa/upload/>`_ for testing, and
-:community_plone:`contact us <>` via our mailing lists or forums. Further
+:community:`contact us <>` via our mailing lists or forums. Further
 information about how the OME team works and how you can contribute to our
 projects is in the :devs_doc:`Contributing Developer Documentation <>`.
 

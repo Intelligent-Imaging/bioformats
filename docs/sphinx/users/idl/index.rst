@@ -2,7 +2,7 @@ IDL
 ===
 
 `IDL
-<http://www.harrisgeospatial.com/ProductsandTechnology/Software/IDL.aspx>`_
+<http://www.harrisgeospatial.com/SoftwareTechnology/IDL.aspx>`_
 (Interactive Data Language) is a popular data visualization and analysis
 platform used for interactive processing of large amounts of data
 including images.
@@ -25,4 +25,4 @@ Upgrading
 ---------
 
 To use a newer version of Bio-Formats, overwrite the requisite JAR files
-with the :downloads:`newer version <>` and restart IDL.
+with the `newer version <https://www.openmicroscopy.org/bio-formats/downloads/>`_ and restart IDL.

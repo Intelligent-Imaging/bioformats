@@ -19,6 +19,10 @@ it within ImageJ and Fiji:
     imagej/installing
     imagej/load-images
     imagej/managing-memory
+    imagej/options
+
+.. seealso::
+   :doc:`/formats/options`
 
 Command line tools
 ==================
@@ -41,13 +45,14 @@ for carrying out a variety of tasks:
     comlinetools/xmlindent
     comlinetools/mkfake
 
-
+.. seealso::
+   :doc:`/formats/options`
 
 OMERO
 =====
 
 OMERO 5 uses Bio-Formats to read original files from over 140 file formats.
-Please refer to the :products_plone:`OMERO <omero>` documentation for further
+Please refer to the :omero:`OMERO <>` documentation for further
 information.
 
 Many other software packages can use Bio-Formats to read and write

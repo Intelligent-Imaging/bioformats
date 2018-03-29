@@ -28,10 +28,8 @@ command line tools, refer to the :doc:`users documentation </users/index>`.
 You can also find tips on common issues with specific formats on the
 pages linked from the :doc:`supported formats table </supported-formats>`.
 
-Please `contact us 
-<http://www.openmicroscopy.org/site/community/mailing-lists>`__ if
-you have any questions or problems with Bio-Formats not addressed by referring
-to the documentation.
+Please :community:`contact us <>` if you have any questions or problems with
+Bio-Formats not addressed by referring to the documentation.
 
 Other places where questions are commonly asked and/or bugs are reported
 include:
@@ -45,7 +43,7 @@ include:
    (searchable using google with 'site:lists.openmicroscopy.org.uk')
 -  `ImageJ forum <http://forum.imagej.net>`_ (for ImageJ/Fiji issues)
 -  `ImageJ mailing list <http://imagej.nih.gov/ij/list.html>`_ (and
-   `archive <http://imagej.1557.n6.nabble.com/>`_)
+   `archive <http://imagej.1557.x6.nabble.com/>`_)
 -  `Fiji GitHub Issues <https://github.com/fiji/fiji/issues>`_
 -  `Confocal microscopy mailing
    list <http://lists.umn.edu/cgi-bin/wa?A0=confocalmicroscopy>`_
@@ -55,7 +53,7 @@ Bio-Formats versions
 
 Since Bio-Formats 5.1.3, Bio-Formats is decoupled from OMERO with its own
 release schedule rather than being updated whenever a new version of
-:products_plone:`OMERO <omero>` is released.
+:omero:`OMERO <>` is released.
 This change allows for more frequent releases to get fixes out to the
 community faster. See the :doc:`version history <whats-new>` for a list of
 changes in each release.
@@ -68,7 +66,7 @@ Versioning policy
 The following set of rules describe the current versioning policy using
 `RFC 2119 <https://www.ietf.org/rfc/rfc2119.txt>`_.
 
-The Bio-Formats API follows strict `semantic versioning <http://semver.org>`_
+The Bio-Formats API follows strict `semantic versioning <https://semver.org>`_
 since Bio-Formats 5.4.0 i.e.:
 
 - The version number MUST take the form X.Y.Z where X, Y, and Z are

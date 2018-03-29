@@ -118,10 +118,10 @@ bf_cpp = bf_github_blob + 'cpp/'
 # Variables used to define other extlinks
 cvs_root = 'http://cvs.openmicroscopy.org.uk'
 trac_root = 'https://trac.openmicroscopy.org/ome'
-oo_root = 'http://www.openmicroscopy.org'
-oo_site_root = oo_root + '/site'
+oo_root = 'https://www.openmicroscopy.org'
 lists_root = 'http://lists.openmicroscopy.org.uk'
-downloads_root = 'http://downloads.openmicroscopy.org'
+downloads_root = 'https://downloads.openmicroscopy.org'
+docs_root = 'https://docs.openmicroscopy.org'
 
 extlinks = {
     # Trac links
@@ -139,18 +139,16 @@ extlinks = {
     # Mailing list/forum links
     'mailinglist' : (lists_root + '/mailman/listinfo/%s', ''),
     'forum' : (oo_root + '/community/%s', ''),
-    # Plone links. Separating them out so that we can add prefixes and
+    # Website links. Separating them out so that we can add prefixes and
     # suffixes during testing.
-    'community_plone' : (oo_site_root + '/community/%s', ''),
-    'products_plone' : (oo_site_root + '/products/%s', ''),
-    'model_doc' : (oo_site_root + '/support/ome-model/%s', ''),
-    'legacy_plone' : (oo_site_root + '/support/legacy/%s', ''),
-    'about_plone' : (oo_site_root + '/about/%s', ''),
-    'team_plone' : (oo_site_root + '/team/%s', ''),
-    'devs_doc' : (oo_site_root + '/support/contributing/%s', ''),
+    'community' : (oo_root + '/support/%s', ''),
+    'omero' : (oo_root + '/omero/%s', ''),
+    # Documentation
+    'model_doc' : (docs_root + '/ome-model/' + ome_model_version + '/' + '%s', ''),
+    'devs_doc' : (docs_root + '/contributing/%s', ''),
     # Downloads
-    'downloads' : (downloads_root + '/latest/bio-formats5.5/%s', ''),
-    'javadoc' : (downloads_root + '/latest/bio-formats5.5/api/%s', ''),
+    'downloads' : (downloads_root + '/latest/bio-formats5.8/%s', ''),
+    'javadoc' : (downloads_root + '/latest/bio-formats5.8/api/%s', ''),
     'common_javadoc' : ('http://static.javadoc.io/org.openmicroscopy/ome-common/' + ome_common_version + '/' + '%s', ''),
     'xml_javadoc' : ('http://static.javadoc.io/org.openmicroscopy/ome-xml/' + ome_model_version + '/' + '%s', ''),
     'specification_javadoc' : ('http://static.javadoc.io/org.openmicroscopy/ome-specification/' + ome_model_version + '/' + '%s', ''),
@@ -365,12 +363,16 @@ texinfo_documents = [
 
 # -- Options for the linkcheck builder ----------------------------------------
 
+# Timeout value, in seconds, for the linkcheck builder
+linkcheck_timeout = int(os.environ.get("SPHINX_LINKCHECK_TIMEOUT", 30))
+linkcheck_workers = int(os.environ.get("SPHINX_LINKCHECK_WORKERS", 5))
+linkcheck_retries = int(os.environ.get("SPHINX_LINKCHECK_RETRIES", 5))
+
 # Regular expressions that match URIs that should not be checked when doing a linkcheck build
-linkcheck_ignore = []
-try:
-    import urllib
-    brokenfiles_url = 'https://raw.github.com/openmicroscopy/sphinx-ignore-links/master/broken_links.txt'
-    brokenlinks = urllib.urlopen(brokenfiles_url)
-    linkcheck_ignore.extend(brokenlinks.read().splitlines())
-except IOError:
-    print "Could not open list of broken links."
+linkcheck_ignore = ['https://imspector.mpibpc.mpg.de',
+    'https://www.olympus-global.com',
+    'http://www.lavisionbiotec.com/',
+    r'.*[.]sourceforge.net',
+    r'http://www.libpng.org/.*',
+    'https://nifti.nimh.nih.gov/nifti-1/'
+]

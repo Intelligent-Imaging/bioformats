@@ -1,6 +1,289 @@
 Version history
 ===============
 
+5.8.1 (2018 March 22)
+---------------------
+
+File format fixes and improvements:
+
+* TIFF
+   - updated TiffWriter so that planes will no longer be split when using non-standard
+     SamplesPerPixel e.g. images with 2 or 4 samples per pixel. This will ensure the ``TiffData``
+     elements represent the structure specified by the user. If users wish to split planes the 
+     ``ChannelSeparator`` and ``bfconvert`` provide the means to do this explicitly
+   - updated TiffWriter to use the correct logic for index checking when writing tiled images
+   - fixed a ``ClassCastException`` when the ``NEW_SUBFILE_TYPE`` tag has a non-standard type
+     or count such that the value is not inlined
+   - updated to also check the last IFD for an ImageJ comment in the scenario that the image has 
+     been processed by other software
+* NRRD (Nearly Raw Raster Data)
+   - added support for ``space directions`` and ``space units`` fields added in version 4
+* Evotec/PerkinElmer Opera Flex
+   - updated to read rather than calculate image offsets when a single tile is used
+
+Bug fixes and improvements:
+
+* limited the number of exceptions in the Bio-Formats plugins exporter when an unsupported pixel 
+  type is found
+* fake test images now allow for per-plane ExposureTime{X,Y,Z} and Position{X,Y,Z} keys in the INI file
+  (for further details see the documentation for :doc:`Generating test images </developers/generating-test-images>`)
+* file patterns now have expanded support for multi-channel pyramids, allowing for the matching of 
+  at least two channels rather than three, and the stitching of files containing a pyramid has also been fixed
+
+Documentation improvements:
+
+* improved testing of external links
+
+5.8.0 (2018 February 21)
+------------------------
+
+New file formats:
+
+* Ionpath MIBI
+   - added a new reader to support the reading of Ionpath Multiplexed Ion Beam Imaging (MIBI)
+     files (thanks to Rachel Finck)
+* PerkinElmer Vectra QPTIFF
+   - added support for PerkinElmer Vectra QPTIFF files (The QPTIFF Bio-Formats reader is provided 
+     through a collaboration between PerkinElmer, Inc and Glencoe Software Inc.)
+
+File format fixes and improvements:
+
+* cellSens VSI
+   - added support for lossless JPEG compression
+* Imspector OBF
+   - improved the parsing of OBF files with embedded OME-XML metadata (thanks to Bjoern Thiel)
+* Leica LIF
+   - companion metadata files are now attached if present
+* Micro-Manager
+   - fixed a bug related to the parsing of the metadata closing block
+* NRRD (Nearly Raw Raster Data)
+   - added support for GZIP pixel stream contained within a .nrrd file
+* Olympus OIR
+   - added support for multi-file datasets
+* OME-TIFF
+   - when files are ungrouped the dimensions are corrected by checking the indexes for each
+     associated TiffData
+* PerkinElmer Operetta
+   - added support for additional metadata fields such as ``Instrument``, ``Wavelength``
+     and ``Exposure time``
+* TIFF
+   - fixed a bug when printing IFD values of type ``OnDemandLongArray``
+   - fixed a bug when writing tile sizes for multi-series images
+* Zeiss CZI
+   - when Z positions are not enumerated then values are calculated from a Z step
+   - metadata for DisplaySetting will now be preserved in the original metadata table
+
+Bug fixes and improvements:
+
+* removed unused ScreenReader in preparation for migrating it to be an external reader
+* fixed a bug with the generation of thumbnails in Bio-Formats plugins
+* updated the Maven POM to unify component version property names
+* tile size is now reported in the core metadata when using the showinf tool
+* added ``setFilePatternIds`` to ``ImporterOptions`` for use with Bio-Formats plugins
+* improved the precision of format identification for MRC, I2I, and Zeiss LSM
+
+Documentation improvements:
+
+* fixed and updated a number of external documentation links
+* added links to `public NRRD samples <https://downloads.openmicroscopy.org/images/NRRD/>`_
+
+5.7.3 (2018 January 11)
+-----------------------
+
+File format fixes and improvements:
+
+* TIFF
+   - fixed a NullPointerException when reading a TIFF file from the root system directory
+   - improved support for large images that are stored as a single uncompressed tile with 
+     multiple interleaved channels
+* MRC (Medical Research Council)
+   - added support in original metadata for the fields ``ISPG`` and ``Is data cube``
+* TillPhotonics TillVision
+   - directory listings for .pst files are now sorted
+* MetaMorph
+   - directory listings are now sorted during file initialization
+* Amira Mesh
+   - now supports ``Avizo`` in the file header in addition to the existing support for ``AmiraMesh``
+* Becker & Hickl SPCImage
+   - added a fix for IllegalArgumentException when reading files with compressed data
+* Zeiss CZI
+   - fixed an IndexOutOfBoundsException when creating ROI objects
+
+Bug fixes and improvements:
+
+* removed unused target utils-formats-api from ant build
+* automated Memoizer tests updated to use UUID for generating unique memo file directories
+* detect and fix Findbugs' ``SBSC_USE_STRINGBUFFER_CONCATENATION`` using StringBuilder
+* configuration files for the automated test suite now use raw physical size rather than formatted size
+* added first version of Dockerfile for running the automated test suite standalone
+
+Documentation improvements:
+
+* added a `support <https://github.com/openmicroscopy/bioformats/blob/develop/SUPPORT.md>`_ 
+  page to the Bio-Formats project
+* updated reference URLs for the Aperio ImageScope and Micro-Manager
+* documented issues with conflicts in the :ref:`JAI ImageIO component <forks-jai>`
+* clarified the default values of HCS keys for fake images in the documentation for 
+  :doc:`Generating test images </developers/generating-test-images>`
+* corrected external links which failed automatic link checking
+
+5.7.2 (2017 November 21)
+------------------------
+
+File format fixes and improvements:
+
+* Nikon ND2
+  - fixed a bug which would use the incorrect channel count for small-sized single channel images
+* MetaMorph TIFF
+   - changed the reader's behaviour to populate exposure times for all planes when only a 
+     single exposure time is defined
+* DeltaVision
+   - improved parsing of the associated log files to add additional key value 
+     pairs to global metadata
+* EPS (Encapsulated PostScript)
+   - fixed an exception when reading pixel data in cases with embedded TIFF
+* GIF
+   - fixed a bug to display the correct data when reading planes out of order
+
+Bug fixes and improvements:
+
+* fixed failures with Ant build from a clean Maven repository by updating Maven repositories 
+  to use HTTPS rather than HTTP
+* now using safe version checking for Bio-Formats plugins to prevent a bug with Java 9
+* updated the JPEG-XR codec to allow either interleaved or non-interleaved data to be returned
+
+Documentation improvements:
+
+* added clarification regarding Bio-Formats version requirements for using Java 7 or above
+* updated download links to latest Bio-Formats release version
+* updated the link to the most active fork of JAI ImageIO
+* fixed a number of external broken links
+* added a Trello link for contributing external developers
+* added a link to the page :doc:`Adding format/reader documentation pages</developers/format-documentation>` 
+  to help those contributing to the documentation or supported formats pages
+* the :doc:`Bio-Rad Gel</formats/bio-rad-gel>` page has been updated to add a link to biorad1sc_reader, 
+  an external python implementation (thanks to Matthew Clapp)
+
+5.7.1 (2017 September 20)
+-------------------------
+
+File format fixes and improvements:
+
+* Nikon NIS-Elements ND2
+   - improved parsing of Z position values
+* LaVision Imspector
+   - corrected the value of time per FLIM channel
+   - fixed a bug which saw the Z and T dimensions swapped
+   - fixed a divide by zero exception
+   - added a fix for incorrect time-base and number of channels
+* TIFF
+   - added support for handling files with a FillOrder of 2 in which the bits in each 
+     byte are reversed
+   - improved support for multi-channel ImageJ TIFF files greater than 4GB in size
+
+Performance improvements:
+
+* improved TIFF performance by using non-regexp String replacement (thanks to Thushara Wijeratna)
+* improved TIFF handling of Strings for large metadata (thanks to T. Alexander Popiel)
+
+Documentation improvements:
+
+* updated documentation to reference support for ImageJ TIFFs
+* added links to format options page to user and developer index pages
+
+5.7.0 (2017 September 4)
+------------------------
+
+File format fixes and improvements:
+
+* Imaris HDF
+   - fixed resolution problems in which dimensions and resolution order were incorrectly 
+     calculated (thanks to Eliana Andreica)
+* Nikon NIS-Elements ND2
+   - fixed a bug in offset calculation when native chunk map is being used
+* MetaMorph
+   - corrected delta T and position Z values for multi-channel images when channels are 
+     split across multiple files
+* Amnis FlowSight
+   - better handling of exceptions in isThisType method (thanks to Claire McQuin)
+* PicoQuant Bin
+   - better handling of exceptions in isThisType method (thanks to Claire McQuin)
+
+Bug fixes and improvements:
+
+* reviewed and corrected URLs throughout the Bio-Formats source code
+* updated Bio-Formats Macro Extensions list with a missing function
+* added a new option in Bio-Formats plugins to configure the slice label display using patterns
+
+Documentation improvements:
+
+* added new format page for :doc:`OMERO Pyramid</formats/omero-pyramid>`
+* updated the developer page for :doc:`Working with whole slide images</developers/wsi>`
+* added new page for configuring options in :doc:`Bio-Formats plugins</users/imagej/options>`
+* updated documentation sidebar to enable navigation of previous versions
+
+5.6.0 (2017 August 14)
+----------------------
+
+File format fixes and improvements:
+
+* Zeiss CZI
+   - added support for images from Elyra PALM system
+   - prevented a potential infinite loop when a scene with a pyramid is missing
+* cellSens VSI
+   - a new option has been added to throw an exception rather than logging a 
+     warning if .ets file is missing. The option, ``cellsens.fail_on_missing_ets``,
+     can be used via the MetadataOptions API, as a parameter in the command 
+     line tools or via the Bio-Formats configuration dialog in ImageJ
+* MetaMorph Stack (STK)
+   - fixed an error with HCS style datasets always returning the first plane 
+     regardless of the requested index
+   - updated to use stage labels starting with ``Scan`` to detect when a whole plate 
+     is saved in a single .stk file
+   - fixed a bug for ``ArrayIndexOutOfBoundsException`` when an image contains 
+     a single Z plane
+* Gatan Digital Micrograph
+   - added support for Z stacks and ROIs
+   - fixed several bugs in tag parsing
+* PerkinElmer Operetta
+   - ensure TIFF files exist before reading
+* JPEG
+   - support added for images with more than ``Integer.MAX_VALUE`` pixels
+
+Bug fixes and improvements:
+
+* JPEGTileDecoder
+   - class now implements AutoCloseable to prevent resource leaks
+* Bio-Formats Plugin
+   - improved performance when using options to concatenate multiple series together
+* TiffSaver
+   - made performance improvements to prevent the writing of a new IFD for each tile, 
+     resulting in significant file size reductions for images with a large quantity of tiles
+
+Documentation improvements:
+
+* updated website and URL links for new `OME Website <https://www.openmicroscopy.org>`_ website
+* added missing :doc:`Andor SIF</formats/andor-sif>` to supported formats page
+* added a new page :doc:`Working with whole slide images</developers/wsi>` outlining the API support 
+  for pyramids/resolutions
+* fixed broken documentation links for external resources which are no longer available
+* updated the style of Sphinx documentation
+
+Component architecture changes/decoupling:
+
+* decoupled image encoding and decoding routines to the new
+  `ome/ome-codecs GitHub repository <https://github.com/ome/ome-codecs>`_
+  and consumed as 'org.openmicroscopy:ome-codecs' artifact from Maven Central
+* removed components/forks/jai - decoupled to the new
+  `ome/ome-jai GitHub repository <https://github.com/ome/ome-jai>`_
+  and consumed as part of 'org.openmicroscopy:ome-jai' artifact from Maven Central
+* replaced components/formats-api/codecs classes with wrappers around 'org.openmicroscopy:ome-codecs'
+* replaced components/formats-bsd/codecs classes with wrappers around 'org.openmicroscopy:ome-codecs'
+
+Updated build system:
+
+* ant now removes the build files of the bundles during 'clean' to prevent a mix of dependencies
+
 5.5.3 (2017 July 5)
 -------------------
 
@@ -1044,7 +1327,7 @@ Java bug fixes:
 
 * Improvements to performance with network file systems
 * Improvements to developer documentation
-* Initial version of `native C++ implementation <http://www.openmicroscopy.org/site/support/bio-formats5.1/developers/cpp/overview.html>`__
+* Initial version of native C++ implementation
 * Improved support for opening and saving ROI data with ImageJ
 * Added support for :doc:`CellH5 </formats/cellh5>` data (thanks to Christoph Sommer)
 * Added support for :doc:`Perkin Elmer Nuance </formats/perkinelmer-nuance>` data (thanks to Lee Kamentsky)
@@ -1222,7 +1505,8 @@ Java bug fixes:
 
 * Updated to :model_doc:`2013-06 OME-XML schema <>`
 * Improved the performance in tiled formats
-* Added caching of Reader metadata using http://code.google.com/p/kryo/
+* Added caching of Reader metadata using
+  https://github.com/EsotericSoftware/kryo
 * Added support for:
    - :doc:`Aperio AFI </formats/aperio-afi>`
    - :doc:`Inveon </formats/inveon>`

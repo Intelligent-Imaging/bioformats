@@ -75,7 +75,7 @@ public class LociFunctions extends MacroFunctions {
 
   /** URL for Javadocs. */
   public static final String URL_JAVADOCS =
-    "http://ci.openmicroscopy.org/job/BIOFORMATS-5.1-latest/javadoc/";
+    "https://downloads.openmicroscopy.org/bio-formats/" + FormatTools.VERSION + "/api/";
 
   // -- Fields --
 
@@ -725,6 +725,8 @@ public class LociFunctions extends MacroFunctions {
       IJ.log("-- dimension order.");
       IJ.log("Ext.getMetadataValue(field, value)");
       IJ.log("-- Obtains the specified metadata field's value.");
+      IJ.log("Ext.getSeriesMetadataValue(field, value)");
+      IJ.log("-- Obtains the specified series metadata field's value.");
       IJ.log("Ext.getSeriesName(seriesName)");
       IJ.log("-- Obtains the name of the current series.");
       IJ.log("Ext.getImageCreationDate(creationDate)");

@@ -25,7 +25,7 @@ ways:
 -  In a standard ImageJ window (including as a hyperstack)
 -  Using the `LOCI Data Browser <http://loci.wisc.edu/software/data-browser>`_ plugin (included)
 -  With Joachim Walter's
-   `Image5D <http://developer.imagej.net/plugins/image5d>`_ plugin
+   `Image5D <http://imagej.net/Image5D>`_ plugin
    (if installed)
 -  With Rainer Heintzmann's
    `View5D <http://www.nanoimaging.uni-jena.de/View5D/View5D.html>`_ plugin (if installed)
@@ -44,7 +44,7 @@ Upgrading
 ---------
 
 To upgrade, just overwrite the old **bioformats_package.jar** with the
-:downloads:`latest one <>`.
+`latest one <https://www.openmicroscopy.org/bio-formats/downloads/>`_.
 
 You can also upgrade the Bio-Formats plugin directly from ImageJ. Select
 :menuselection:`Plugins --> Bio-Formats --> Update Bio-Formats Plugins`
@@ -142,3 +142,10 @@ Usage tips
    is used, select :menuselection:`All files` or :menuselection:`All supported
    file types` in the ``Files of type`` box, as an extension will not be
    automatically added in those cases.
+
+-  Saving an open image using Bio-Formats must be done via
+   :menuselection:`Plugins > Bio-Formats > Bio-Formats Exporter` or the corresponding macro code.
+   :menuselection:`File > Save` and :menuselection:`File > Save As...` do not use Bio-Formats.
+   In particular, using :menuselection:`File > Save As...` to save a TIFF will result in an
+   ImageJ-specific TIFF being written.  While Bio-Formats can read ImageJ TIFFs, other software
+   may not; see :doc:`/formats/tiff` for additional information.

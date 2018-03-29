@@ -111,6 +111,17 @@ You can sort this table by clicking on any of the headings.
      - |no|
      - |no|
      - |no|
+   * - :doc:`formats/andor-sif`
+     - .sif
+     - |Good|
+     - |Fair|
+     - |Fair|
+     - |Fair|
+     - |Fair|
+     - |no|
+     - |no|
+     - |no|
+     - |no|
    * - :doc:`formats/animated-png`
      - .png
      - |Very good|
@@ -672,6 +683,17 @@ You can sort this table by clicking on any of the headings.
      - |no|
      - |yes|
      - |no|
+   * - :doc:`formats/ionpath-mibi`
+     - .tif, .tiff
+     - |Very good|
+     - |Very good|
+     - |Very good|
+     - |Poor|
+     - |Fair|
+     - |no|
+     - |no|
+     - |no|
+     - |no|
    * - :doc:`formats/iplab`
      - .ipl
      - |Outstanding|
@@ -1091,7 +1113,7 @@ You can sort this table by clicking on any of the headings.
      - |no|
      - |no|
    * - :doc:`formats/ome-tiff`
-     - `.ome.tiff, .ome.tif, .ome.tf2, .ome.tf8, .ome.btf <http://www.openmicroscopy.org/site/support/ome-model/ome-tiff/index.html>`_
+     - :model_doc:`.ome.tiff, .ome.tif, .ome.tf2, .ome.tf8, .ome.btf <ome-tiff/index.html>`
      - |Outstanding|
      - |Outstanding|
      - |Outstanding|
@@ -1102,7 +1124,7 @@ You can sort this table by clicking on any of the headings.
      - |yes|
      - |no|
    * - :doc:`formats/ome-xml`
-     - `.ome, .ome.xml <http://www.openmicroscopy.org/site/support/ome-model/ome-xml/index.html>`_
+     - :model_doc:`.ome, .ome.xml <ome-xml/index.html>`
      - |Outstanding|
      - |Outstanding|
      - |Outstanding|
@@ -1112,6 +1134,17 @@ You can sort this table by clicking on any of the headings.
      - |yes|
      - |yes|
      - |no|
+   * - :doc:`formats/omero-pyramid`
+     - 
+     - |Outstanding|
+     - |Outstanding|
+     - |Outstanding|
+     - |Fair|
+     - |Fair|
+     - |no|
+     - |yes|
+     - |yes|
+     - |yes|
    * - :doc:`formats/oxford-instruments`
      - .top
      - |Good|
@@ -1194,6 +1227,17 @@ You can sort this table by clicking on any of the headings.
      - |Very good|
      - |Good|
      - |Fair|
+     - |Fair|
+     - |Fair|
+     - |no|
+     - |no|
+     - |no|
+     - |no|
+   * - :doc:`formats/perkinelmer-vectra-qptiff`
+     - .tif, .qptiff
+     - |Very good|
+     - |Outstanding|
+     - |Outstanding|
      - |Fair|
      - |Fair|
      - |no|
@@ -1608,7 +1652,7 @@ You can sort this table by clicking on any of the headings.
      - |no|
      - |no|
    * - :doc:`formats/zeiss-czi`
-     - `.czi <http://www.zeiss.com/microscopy/int/products/microscope-software/zen/czi.html>`_
+     - `.czi <https://www.zeiss.com/microscopy/int/products/microscope-software/zen/czi.html>`_
      - |Outstanding|
      - |Outstanding|
      - |Very good|
@@ -1630,7 +1674,7 @@ You can sort this table by clicking on any of the headings.
      - |yes|
      - |no|
 
-Bio-Formats currently supports **146** formats
+Bio-Formats currently supports **150** formats
 
 .. glossary::
     Ratings legend and definitions
@@ -1708,6 +1752,7 @@ Bio-Formats currently supports **146** formats
     formats/amira-mesh
     formats/amnis-flowsight
     formats/analyze-75
+    formats/andor-sif
     formats/animated-png
     formats/aperio-afi
     formats/aperio-svs-tiff
@@ -1759,6 +1804,7 @@ Bio-Formats currently supports **146** formats
     formats/incell-3000
     formats/inr
     formats/inveon
+    formats/ionpath-mibi
     formats/iplab
     formats/iplab-mac
     formats/jeol
@@ -1799,6 +1845,7 @@ Bio-Formats currently supports **146** formats
     formats/olympus-sis-tiff
     formats/ome-tiff
     formats/ome-xml
+    formats/omero-pyramid
     formats/oxford-instruments
     formats/pcoraw
     formats/pcx-pc-paintbrush
@@ -1807,6 +1854,7 @@ Bio-Formats currently supports **146** formats
     formats/perkinelmer-nuance
     formats/perkinelmer-operetta
     formats/perkinelmer-ultraview
+    formats/perkinelmer-vectra-qptiff
     formats/pgm
     formats/photoshop-psd
     formats/photoshop-tiff

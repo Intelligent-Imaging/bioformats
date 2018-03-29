@@ -92,6 +92,8 @@ public class MinimalTiffReader extends FormatReader {
 
   protected boolean noSubresolutions = false;
 
+  protected boolean seriesToIFD = false;
+
   /** Number of JPEG 2000 resolution levels. */
   private Integer resolutionLevels;
 
@@ -279,7 +281,12 @@ public class MinimalTiffReader extends FormatReader {
 
     IFD firstIFD = ifds.get(0);
     lastPlane = no;
-    IFD ifd = ifds.get(no);
+    IFD ifd;
+    if (seriesToIFD) {
+      ifd = ifds.get(getSeries());
+    } else {
+      ifd = ifds.get(no);
+    }
     if ((firstIFD.getCompression() == TiffCompression.JPEG_2000
         || firstIFD.getCompression() == TiffCompression.JPEG_2000_LOSSY)
         && resolutionLevels != null) {
@@ -376,6 +383,7 @@ public class MinimalTiffReader extends FormatReader {
       tiffParser = null;
       resolutionLevels = null;
       j2kCodecOptions = null;
+      seriesToIFD = false;
     }
   }
 
@@ -447,6 +455,7 @@ public class MinimalTiffReader extends FormatReader {
     thumbnailIFDs = new IFDList();
     subResolutionIFDs = new ArrayList<IFDList>();
     for (IFD ifd : allIFDs) {
+      tiffParser.fillInIFD(ifd);
       Number subfile = (Number) ifd.getIFDValue(IFD.NEW_SUBFILE_TYPE);
       int subfileType = subfile == null ? 0 : subfile.intValue();
       if (subfileType != 1 || allIFDs.size() <= 1) {
@@ -465,7 +474,6 @@ public class MinimalTiffReader extends FormatReader {
 
     tiffParser.setAssumeEqualStrips(equalStrips);
     for (IFD ifd : ifds) {
-      tiffParser.fillInIFD(ifd);
       if ((ifd.getCompression() == TiffCompression.JPEG_2000
           || ifd.getCompression() == TiffCompression.JPEG_2000_LOSSY) &&
           ifd.getImageWidth() == ifds.get(0).getImageWidth()) {

@@ -55,7 +55,8 @@ Type "ant -p" for a list of targets.
       clean-bio-formats-tools,
       clean-tests,
       clean-turbojpeg,
-      clean-docs-sphinx"
+      clean-docs-sphinx,
+      clean-bundles"
     description="remove build files for all components">
     <delete dir="${artifact.dir}"/>
     <delete dir="build"/>
@@ -128,11 +129,6 @@ Type "ant -p" for a list of targets.
   <target name="clean-formats-api"
     description="remove build files for reader and writer APIs">
     <ant dir="components/formats-api" target="formats-api.clean"/>
-  </target>
-
-  <target name="utils-formats-api" depends="jar-formats-api"
-    description="compile extra utilities for reader and writer APIs">
-    <ant dir="components/formats-api" target="formats-api.utils"/>
   </target>
 
   <target name="test-formats-api" depends="jar-formats-api, testing-deps"
@@ -383,6 +379,12 @@ Type "ant -p" for a list of targets.
   </target>
 
   <!-- Tool collections -->
+
+  <target name="clean-bundles"
+    description="remove build files in bundles component">
+    <ant dir="components/bundles/bioformats_package" target="bioformats_package.clean"/>
+    <ant dir="components/bundles/loci_tools" target="loci_tools.clean"/>
+  </target>
 
   <target name="tools" depends="jars"
     description="generate JAR file bundles of Bio-Formats and dependencies">

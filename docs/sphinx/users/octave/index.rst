@@ -1,7 +1,7 @@
 GNU Octave
 ==========
 
-`GNU Octave <http://www.octave.org>`_ is a high-level interpreted language,
+`GNU Octave <https://www.gnu.org/software/octave/>`_ is a high-level interpreted language,
 primarily intended for numerical computations.
 Being an array programming language, it is naturally suited for image
 processing and handling of N dimensional datasets.
@@ -33,7 +33,7 @@ Installation
    system-wide or user installation respectively).
 #. Add `bioformats_package.jar` to Octave's *static* javaclasspath (see
    `Octave's documentation <https://www.gnu.org/software/octave/doc/interpreter/Making-Java-Classes-Available.html>`_).
-#. Download the Octave package from the :downloads:`downloads page <>`.
+#. Download the :downloads:`Octave package <artifacts/>`.
 #. Start octave and install the package with::
 
       >> pkg install path-to-bioformats-octave-version.tar.gz

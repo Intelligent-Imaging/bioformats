@@ -92,11 +92,18 @@ not be any code here, just build system files.
 
 `OME JAI (deprecated) <https://github.com/ome/ome-jai>`_:
 
-This is a fork of `JAI ImageIO <http://java.net/projects/jai-imageio-core>`_
-which adds support for decoding YCbCr JPEG-2000 data.  This is primarily
-needed for reading images from histology/pathology formats in
-:ref:`formats-gpl <formats-gpl>`.  There are no dependencies on other
-components.
+This is a fork of JAI ImageIO. JAI ImageIO is no longer maintained;
+the most active fork is
+`jai-imageio-core <https://github.com/jai-imageio/jai-imageio-core>`__
+on GitHub. JAI provides support for decoding YCbCr JPEG-2000 data.
+This is primarily needed for reading images from histology/pathology
+formats in :ref:`formats-gpl <formats-gpl>`.  There are no dependencies
+on other components.
+
+The status of this component means that you may encounter errors due to
+conflicting JARs e.g. between Bio-Formats and other toolboxes within Fiji or
+MATLAB, especially when trying to open JPEG-2000 data. In this case, you will
+need to remove the conflicting JAR(s) as a workaround.
 
 .. _forks-turbojpeg:
 
@@ -108,8 +115,8 @@ This is a fork of `libjpeg-turbo <http://libjpeg-turbo.virtualgl.org/>`_.
 There are not any real code changes, but having this as a separate component
 allows us to package the libjpeg-turbo Java API together with all of the
 required binaries into a single .jar file using `native-lib-loader
-<http://github.com/scijava/native-lib-loader>`_.  There are no dependencies on
-other components.
+<https://github.com/scijava/native-lib-loader>`_.  There are no dependencies
+on other components.
 
 .. _formats-api:
 
